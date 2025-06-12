@@ -1,1 +1,15 @@
-{}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js",
+  "/tenders": "pages/tenders.js",
+  "/api/tenders": "pages/api/tenders.js",
+  "/api/tenders/[id]": "pages/api/tenders/[id].js",
+  "/company": "pages/company.js",
+  "/api/company": "pages/api/company.js",
+  "/reputation": "pages/reputation.js",
+  "/api/attestations": "pages/api/attestations.js",
+  "/login": "pages/login.js",
+  "/tenders/[id]": "pages/tenders/[id].js"
+}
