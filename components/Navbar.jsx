@@ -16,6 +16,7 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Tenders', href: '/tenders' },
+    { name: 'Todos', href: '/todos' },
     { name: 'Profile', href: '/company' },
     { name: 'Proofs', href: '/reputation' },
   ];
