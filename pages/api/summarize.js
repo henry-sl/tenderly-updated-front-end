@@ -1,6 +1,11 @@
+// pages/api/summarize.js
+// This API endpoint generates a concise summary of a tender
+// It uses AI to extract the key points from the tender description
+
 import { getTenderById } from '../../lib/store';
 
 export default async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed, use POST' });
   }
@@ -16,7 +21,7 @@ export default async function handler(req, res) {
     return res.status(404).json({ error: 'Tender not found' });
   }
 
-  // Construct the prompt for Claude
+  // Construct the prompt for Claude AI
   const prompt = 
     `Human: Please summarize the following tender in 3-4 sentences, focusing on the key points and requirements.\n\n` +
     `Tender Title: "${tender.title}"\n` +
@@ -34,6 +39,7 @@ export default async function handler(req, res) {
     });
   }
 
+  // Use Claude AI to generate a summary (when API key is available)
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: 'POST',

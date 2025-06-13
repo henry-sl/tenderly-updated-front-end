@@ -1,13 +1,19 @@
+// pages/_app.js
+// This is the main entry point for the Next.js application
+// It wraps all pages with global providers and layout
+
 import '../styles/globals.css';
 import { AuthProvider } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
 
-//This is the main entry point for your Next.js application. It wraps all your pages with the AuthProvider to make authentication context available throughout the app, and also includes the Layout component, ensuring that the navigation, footer, and toast container are present on every page.
-
+// The App component receives the Component to render and its pageProps
 export default function App({ Component, pageProps }) {
   return (
+    // AuthProvider makes authentication state available throughout the app
     <AuthProvider>
+      {/* Layout provides consistent page structure with navbar, footer, etc. */}
       <Layout>
+        {/* Render the current page component with its props */}
         <Component {...pageProps} />
       </Layout>
     </AuthProvider>

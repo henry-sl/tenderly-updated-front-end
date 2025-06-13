@@ -1,3 +1,7 @@
+// pages/proposals/[id].js
+// This page provides an interface for editing and submitting proposals
+// It includes version history, save/submit functionality, and a rich text editor
+
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -15,20 +19,23 @@ import {
 
 export default function ProposalEditorPage() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // Get proposal ID from URL
   const { addToast } = useToast();
   
+  // State for proposal content and UI controls
   const [content, setContent] = useState('');
   const [showVersions, setShowVersions] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  // Fetch proposal data from the API
   const { data: proposal, error, mutate } = useSWR(
     id ? `/api/proposals/${id}` : null,
     fetcher,
     {
       onSuccess: (data) => {
+        // Initialize editor content when proposal data is loaded
         if (data && content === '') {
           setContent(data.content || '');
         }
@@ -36,11 +43,13 @@ export default function ProposalEditorPage() {
     }
   );
 
+  // Fetch version history data from the API
   const { data: versions } = useSWR(
     id ? `/api/versions/${id}` : null,
     fetcher
   );
 
+  // Save the current draft
   const handleSaveDraft = async () => {
     try {
       setSaving(true);
@@ -49,7 +58,7 @@ export default function ProposalEditorPage() {
         body: { proposalId: id, content }
       });
       addToast('Draft saved successfully!', 'success');
-      mutate();
+      mutate(); // Refresh proposal data
     } catch (error) {
       addToast('Failed to save draft', 'error');
     } finally {
@@ -57,6 +66,7 @@ export default function ProposalEditorPage() {
     }
   };
 
+  // Submit the proposal (record on blockchain)
   const handleSubmit = async () => {
     try {
       setSubmitting(true);
@@ -66,7 +76,7 @@ export default function ProposalEditorPage() {
       });
       addToast(`Proposal submitted! Transaction ID: ${result.txId}`, 'success');
       setShowSubmitModal(false);
-      router.push('/reputation');
+      router.push('/reputation'); // Navigate to reputation page after submission
     } catch (error) {
       addToast('Failed to submit proposal', 'error');
     } finally {
@@ -74,11 +84,13 @@ export default function ProposalEditorPage() {
     }
   };
 
+  // Restore a previous version of the proposal
   const handleVersionSelect = (version) => {
     setContent(version.content);
     addToast('Version restored', 'success');
   };
 
+  // Error state
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -89,6 +101,7 @@ export default function ProposalEditorPage() {
     );
   }
 
+  // Loading state
   if (!proposal) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -110,6 +123,7 @@ export default function ProposalEditorPage() {
             Proposal for {proposal.tenderTitle}
           </h1>
           <div className="flex items-center space-x-4">
+            {/* Status badge */}
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
               isSubmitted 
                 ? 'bg-green-100 text-green-800' 
@@ -120,8 +134,10 @@ export default function ProposalEditorPage() {
           </div>
         </div>
 
+        {/* Action buttons - only shown for drafts, not submitted proposals */}
         {!isSubmitted && (
           <div className="flex flex-wrap items-center gap-4">
+            {/* Save Draft button */}
             <button
               onClick={handleSaveDraft}
               disabled={saving}
@@ -131,6 +147,7 @@ export default function ProposalEditorPage() {
               {saving ? 'Saving...' : 'Save Draft'}
             </button>
             
+            {/* Version History button */}
             <button
               onClick={() => setShowVersions(true)}
               className="btn btn-secondary"
@@ -139,6 +156,7 @@ export default function ProposalEditorPage() {
               Version History
             </button>
             
+            {/* Submit Proposal button */}
             <button
               onClick={() => setShowSubmitModal(true)}
               className="btn btn-primary"
@@ -150,12 +168,14 @@ export default function ProposalEditorPage() {
         )}
       </div>
 
+      {/* Proposal Editor */}
       <ProposalEditor
         content={content}
         onChange={setContent}
-        readOnly={isSubmitted}
+        readOnly={isSubmitted} // Make editor read-only for submitted proposals
       />
 
+      {/* Version History Drawer */}
       <VersionDrawer
         isOpen={showVersions}
         onClose={() => setShowVersions(false)}
@@ -163,6 +183,7 @@ export default function ProposalEditorPage() {
         onSelectVersion={handleVersionSelect}
       />
 
+      {/* Submit Confirmation Modal */}
       <Modal
         isOpen={showSubmitModal}
         onClose={() => setShowSubmitModal(false)}

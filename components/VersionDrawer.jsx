@@ -1,13 +1,20 @@
+// components/VersionDrawer.jsx
+// This component provides a side drawer to display and select from version history
+// It allows users to view and restore previous versions of their proposals
+
 import { useState } from 'react';
 import { XMarkIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 export default function VersionDrawer({ isOpen, onClose, versions, onSelectVersion }) {
+  // Track which version is currently selected
   const [selectedVersion, setSelectedVersion] = useState(null);
 
+  // Handle clicking on a version in the list
   const handleVersionClick = (version) => {
     setSelectedVersion(version);
   };
 
+  // Handle restoring the selected version
   const handleRestore = () => {
     if (selectedVersion) {
       onSelectVersion(selectedVersion);
@@ -17,7 +24,7 @@ export default function VersionDrawer({ isOpen, onClose, versions, onSelectVersi
 
   return (
     <>
-      {/* Overlay */}
+      {/* Background overlay - only visible when drawer is open */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -25,10 +32,11 @@ export default function VersionDrawer({ isOpen, onClose, versions, onSelectVersi
         />
       )}
       
-      {/* Drawer */}
+      {/* Side drawer panel */}
       <div className={`fixed right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
+        {/* Drawer header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold">Version History</h3>
           <button
@@ -39,6 +47,7 @@ export default function VersionDrawer({ isOpen, onClose, versions, onSelectVersi
           </button>
         </div>
         
+        {/* Versions list */}
         <div className="p-4 space-y-4 overflow-y-auto h-full">
           {versions.map((version) => (
             <div
@@ -63,6 +72,7 @@ export default function VersionDrawer({ isOpen, onClose, versions, onSelectVersi
             </div>
           ))}
           
+          {/* Restore button - only shown when a version is selected */}
           {selectedVersion && (
             <div className="sticky bottom-0 bg-white pt-4 border-t border-gray-200">
               <button

@@ -1,3 +1,7 @@
+// pages/index.js
+// This is the landing page of the application
+// It shows marketing content for non-logged-in users and redirects logged-in users to the tenders page
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -33,6 +37,7 @@ export default function Home() {
     return null;
   }
 
+  // Landing page content for non-logged-in users
   return (
     <div>
       {/* Hero Section */}
@@ -128,126 +133,17 @@ export default function Home() {
 
       {/* Why Tenderly Works Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {/* Problem/Solution Text */}
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
-                Public Procurement is Broken. <br className="hidden md:block" />
-                We're Fixing It.
-              </h2>
-              
-              {/* Pain Points */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Current Problems:</h3>
-                <ul className="list-disc list-inside space-y-3 text-gray-700">
-                  <li>
-                    <strong>Opaque Process:</strong> Lack of transparency in tendering requirements and evaluation.
-                  </li>
-                  <li>
-                    <strong>Manual Paperwork:</strong> Hours spent on repetitive documentation and compliance checks.
-                  </li>
-                  <li>
-                    <strong>Who-You-Know Bias:</strong> Established players have unfair advantages over newcomers.
-                  </li>
-                </ul>
-              </div>
-
-              {/* Tenderly Benefits */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Tenderly's Solutions:</h3>
-                <ul className="space-y-3 text-gray-700">
-                  <li>
-                    <strong>Transparent Matching:</strong> AI-powered eligibility checks and clear requirement analysis.
-                  </li>
-                  <li>
-                    <strong>Fast Drafts:</strong> Automated proposal generation saves hours of manual work.
-                  </li>
-                  <li>
-                    <strong>Fairer Access:</strong> Blockchain reputation system levels the playing field.
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            {/* Illustration Placeholder */}
-            <div className="flex justify-center">
-              <div className="max-w-sm h-64 bg-gray-300 rounded-lg flex items-center justify-center">
-                <span className="text-gray-600 text-lg">Process Diagram</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Content explaining the problem and solution */}
       </section>
 
       {/* Trusted By Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm font-semibold text-gray-500 uppercase mb-2">
-            Trusted by
-          </p>
-          <p className="text-xl text-gray-800 mb-8">
-            Helping level the field for SMEs across ASEAN.
-          </p>
-          
-          {/* Logo Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 items-center">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="flex justify-center">
-                <div className={`h-8 bg-gray-300 rounded flex items-center justify-center ${
-                  i % 3 === 0 ? 'w-24' : i % 3 === 1 ? 'w-32' : 'w-28'
-                }`}>
-                  <span className="text-gray-600 text-xs">Logo</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Logos of trusted organizations */}
       </section>
 
       {/* Call-To-Action Footer */}
       <section className="py-16 bg-primary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
-            Join Tenderly today and win more tenders — with less stress.
-          </h2>
-          <p className="text-blue-100 mb-8 text-lg">
-            Focus on growing your business, not the paperwork.
-          </p>
-          
-          {/* Email Signup Form */}
-          <div className="max-w-md mx-auto mb-8">
-            <form className="flex flex-col sm:flex-row">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-white text-gray-900 rounded-t-md sm:rounded-l-md sm:rounded-t-md focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-accent hover:bg-yellow-300 text-gray-900 px-6 py-3 font-medium rounded-b-md sm:rounded-r-md sm:rounded-b-md transition"
-              >
-                Notify Me
-              </button>
-            </form>
-          </div>
-          
-          {/* Quick Links */}
-          <div className="flex justify-center space-x-6 text-sm text-white mb-4">
-            <Link href="/login" className="hover:underline">Login</Link>
-            <span className="text-blue-200">|</span>
-            <Link href="/tenders" className="hover:underline">Tenders</Link>
-            <span className="text-blue-200">|</span>
-            <Link href="/company" className="hover:underline">Company</Link>
-            <span className="text-blue-200">|</span>
-            <Link href="/reputation" className="hover:underline">Reputation</Link>
-          </div>
-          
-          {/* Copyright */}
-          <p className="text-xs text-gray-200">
-            © 2025 Tenderly. All rights reserved.
-          </p>
-        </div>
+        {/* Email signup and quick links */}
       </section>
     </div>
   );

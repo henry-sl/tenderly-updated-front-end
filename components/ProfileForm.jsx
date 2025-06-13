@@ -1,11 +1,16 @@
+// components/ProfileForm.jsx
+// This component provides a form for viewing and updating the company profile
+// It fetches the current profile data and allows the user to edit and save changes
+
 import { useState, useEffect } from 'react';
 import { api } from '../lib/api';
 import { useToast } from '../hooks/useToast';
 
 export default function ProfileForm() {
   const { addToast } = useToast();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state for initial data fetch
+  const [saving, setSaving] = useState(false); // Loading state for save operation
+  // Form data state with default empty values
   const [formData, setFormData] = useState({
     name: '',
     registrationNumber: '',
@@ -16,10 +21,12 @@ export default function ProfileForm() {
     address: ''
   });
 
+  // Load company profile data when component mounts
   useEffect(() => {
     loadCompanyData();
   }, []);
 
+  // Function to fetch company profile data from the API
   const loadCompanyData = async () => {
     try {
       const data = await api('/api/company');
@@ -39,6 +46,7 @@ export default function ProfileForm() {
     }
   };
 
+  // Handle form submission to update the company profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -47,6 +55,7 @@ export default function ProfileForm() {
         method: 'PUT',
         body: {
           ...formData,
+          // Convert comma-separated certifications string to array
           certifications: formData.certifications.split(',').map(c => c.trim()).filter(Boolean)
         }
       });
@@ -58,6 +67,7 @@ export default function ProfileForm() {
     }
   };
 
+  // Handle input field changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -65,12 +75,14 @@ export default function ProfileForm() {
     });
   };
 
+  // Calculate profile completeness percentage
   const calculateCompleteness = () => {
     const fields = Object.values(formData);
     const filledFields = fields.filter(field => field.trim() !== '').length;
     return Math.round((filledFields / fields.length) * 100);
   };
 
+  // Show loading skeleton while data is being fetched
   if (loading) {
     return (
       <div className="card">
@@ -91,7 +103,7 @@ export default function ProfileForm() {
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-4">Company Profile</h2>
         
-        {/* Completeness Bar */}
+        {/* Profile Completeness Bar */}
         <div className="mb-4">
           <div className="flex justify-between text-sm text-gray-600 mb-1">
             <span>Profile Completeness</span>
@@ -106,8 +118,10 @@ export default function ProfileForm() {
         </div>
       </div>
 
+      {/* Company Profile Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Company Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Company Name *
@@ -123,6 +137,7 @@ export default function ProfileForm() {
             />
           </div>
 
+          {/* Registration Number */}
           <div>
             <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700 mb-1">
               Registration Number
@@ -137,6 +152,7 @@ export default function ProfileForm() {
             />
           </div>
 
+          {/* Contact Email */}
           <div>
             <label htmlFor="contactEmail" className="block text-sm font-medium text-gray-700 mb-1">
               Contact Email
@@ -151,6 +167,7 @@ export default function ProfileForm() {
             />
           </div>
 
+          {/* Contact Phone */}
           <div>
             <label htmlFor="contactPhone" className="block text-sm font-medium text-gray-700 mb-1">
               Contact Phone
@@ -166,6 +183,7 @@ export default function ProfileForm() {
           </div>
         </div>
 
+        {/* Business Address */}
         <div>
           <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
             Business Address
@@ -180,6 +198,7 @@ export default function ProfileForm() {
           />
         </div>
 
+        {/* Certifications */}
         <div>
           <label htmlFor="certifications" className="block text-sm font-medium text-gray-700 mb-1">
             Certifications (comma-separated)
@@ -195,6 +214,7 @@ export default function ProfileForm() {
           />
         </div>
 
+        {/* Company Experience */}
         <div>
           <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-1">
             Company Experience & Capabilities
@@ -210,6 +230,7 @@ export default function ProfileForm() {
           />
         </div>
 
+        {/* Submit Button */}
         <div className="flex justify-end">
           <button
             type="submit"

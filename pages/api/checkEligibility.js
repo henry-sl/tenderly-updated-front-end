@@ -1,6 +1,11 @@
+// pages/api/checkEligibility.js
+// This API endpoint checks if a company is eligible for a specific tender
+// It uses AI to analyze the tender requirements and company profile
+
 import { getTenderById, getCompanyProfile } from '../../lib/store';
 
 export default async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,17 +15,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'tenderId is required' });
   }
 
+  // Get tender details
   const tender = getTenderById(tenderId);
   if (!tender) {
     return res.status(404).json({ error: 'Tender not found' });
   }
 
+  // Get company profile
   const profile = getCompanyProfile();
   if (!profile) {
     return res.status(500).json({ error: 'Company profile not found' });
   }
 
-  // Build structured prompt with tender + profile info
+  // Build structured prompt with tender + profile info for AI analysis
   const tenderText = `Title: ${tender.title}\nDescription: ${tender.description}`;
   const profileText = 
     `Name: ${profile.name}\n` +
@@ -60,6 +67,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ eligibility: mockEligibility });
   }
 
+  // Use Claude AI to analyze eligibility (when API key is available)
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: 'POST',

@@ -1,6 +1,11 @@
+// components/SummaryBox.jsx
+// This component displays an AI-generated summary of a tender
+// It shows a loading skeleton when the summary is being generated
+
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 
 export default function SummaryBox({ summary, loading }) {
+  // Show loading skeleton while summary is being generated
   if (loading) {
     return (
       <div className="card">
@@ -17,6 +22,7 @@ export default function SummaryBox({ summary, loading }) {
     );
   }
 
+  // Show the actual summary when available
   return (
     <div className="card">
       <div className="flex items-center mb-3">

@@ -1,3 +1,7 @@
+// components/Navbar.jsx
+// This component renders the navigation bar at the top of every page
+// It includes the app logo, navigation links, and user authentication controls
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -5,15 +9,19 @@ import { useAuth } from '../contexts/AuthContext';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function Navbar() {
+  // Get authentication state and functions from the auth context
   const { user, signOut } = useAuth();
   const router = useRouter();
+  // State for mobile menu toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Handle user sign out
   const handleSignOut = async () => {
     await signOut();
     router.push('/login');
   };
 
+  // Navigation links configuration
   const navigation = [
     { name: 'Tenders', href: '/tenders' },
     { name: 'Todos', href: '/todos' },
@@ -25,6 +33,7 @@ export default function Navbar() {
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
+          {/* Logo and brand name */}
           <div className="flex items-center">
             <Link href="/tenders" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -34,7 +43,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             {user && navigation.map((item) => (
               <Link
@@ -51,7 +60,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* User Menu */}
+          {/* User Menu - shows user email and logout button when logged in, or login button when logged out */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
@@ -70,7 +79,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu button - only visible on small screens */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -86,7 +95,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - only visible when mobileMenuOpen is true */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white">
           <div className="px-2 pt-2 pb-3 space-y-1">

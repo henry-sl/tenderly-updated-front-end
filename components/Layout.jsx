@@ -1,11 +1,20 @@
+// components/Layout.jsx
+// This component provides the common layout structure for all pages
+// It includes the navigation bar, main content area, footer, and toast container
+
 import Navbar from './Navbar';
 import ToastContainer from './ToastContainer';
 
 export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Navigation bar at the top of every page */}
       <Navbar />
+      
+      {/* Main content area where page-specific content is rendered */}
       <main>{children}</main>
+      
+      {/* Footer with attribution */}
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
@@ -23,6 +32,8 @@ export default function Layout({ children }) {
           </div>
         </div>
       </footer>
+      
+      {/* Toast notification container for displaying alerts */}
       <ToastContainer />
     </div>
   );

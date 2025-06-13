@@ -1,3 +1,7 @@
+// pages/signup.js
+// This page provides user registration functionality
+// It uses Supabase Auth UI for signup and redirects logged-in users to the tenders page
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Auth } from '@supabase/auth-ui-react';
@@ -9,6 +13,7 @@ export default function Signup() {
   const { user } = useAuth();
   const router = useRouter();
 
+  // Redirect to tenders page if user is already logged in
   useEffect(() => {
     if (user) {
       router.push('/tenders');
@@ -18,6 +23,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Header */}
         <div>
           <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">T</span>
@@ -29,10 +35,12 @@ export default function Signup() {
             Join Tenderly and start winning more tenders
           </p>
         </div>
+        
+        {/* Supabase Auth UI - configured for signup view */}
         <div className="bg-white py-8 px-6 shadow rounded-lg">
           <Auth
             supabaseClient={supabase}
-            view="sign_up"
+            view="sign_up" // Show signup form instead of login
             appearance={{
               theme: ThemeSupa,
               variables: {
@@ -44,8 +52,8 @@ export default function Signup() {
                 },
               },
             }}
-            providers={[]}
-            redirectTo={`${window.location.origin}/tenders`}
+            providers={[]} // No social login providers
+            redirectTo={`${window.location.origin}/tenders`} // Redirect after successful signup
           />
         </div>
       </div>

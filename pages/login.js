@@ -1,3 +1,7 @@
+// pages/login.js
+// This page provides user authentication functionality
+// It uses Supabase Auth UI for login and redirects logged-in users to the tenders page
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Auth } from '@supabase/auth-ui-react';
@@ -9,6 +13,7 @@ export default function Login() {
   const { user } = useAuth();
   const router = useRouter();
 
+  // Redirect to tenders page if user is already logged in
   useEffect(() => {
     if (user) {
       router.push('/tenders');
@@ -18,6 +23,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Header */}
         <div>
           <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">T</span>
@@ -29,6 +35,8 @@ export default function Login() {
             Your AI-powered tender assistant
           </p>
         </div>
+        
+        {/* Supabase Auth UI */}
         <div className="bg-white py-8 px-6 shadow rounded-lg">
           <Auth
             supabaseClient={supabase}
@@ -43,8 +51,8 @@ export default function Login() {
                 },
               },
             }}
-            providers={[]}
-            redirectTo={`${window.location.origin}/tenders`}
+            providers={[]} // No social login providers
+            redirectTo={`${window.location.origin}/tenders`} // Redirect after successful login
           />
         </div>
       </div>

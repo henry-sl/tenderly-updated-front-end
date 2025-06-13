@@ -1,6 +1,11 @@
+// pages/api/company.js
+// This API endpoint handles company profile operations
+// It supports GET (retrieve profile) and PUT (update profile) methods
+
 import { getCompanyProfile, updateCompanyProfile } from '../../lib/store';
 
 export default function handler(req, res) {
+  // GET request - retrieve company profile
   if (req.method === 'GET') {
     try {
       const profile = getCompanyProfile();
@@ -9,7 +14,9 @@ export default function handler(req, res) {
       console.error('Error fetching company profile:', error);
       res.status(500).json({ error: 'Failed to fetch company profile' });
     }
-  } else if (req.method === 'PUT') {
+  } 
+  // PUT request - update company profile
+  else if (req.method === 'PUT') {
     try {
       const updates = req.body;
       const updatedProfile = updateCompanyProfile(updates);
@@ -18,7 +25,9 @@ export default function handler(req, res) {
       console.error('Error updating company profile:', error);
       res.status(500).json({ error: 'Failed to update company profile' });
     }
-  } else {
+  } 
+  // Other methods not allowed
+  else {
     res.status(405).json({ error: 'Method not allowed' });
   }
 }

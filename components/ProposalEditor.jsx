@@ -1,3 +1,7 @@
+// components/ProposalEditor.jsx
+// This component provides a rich text editor for creating and editing proposals
+// It includes formatting buttons and a textarea for content
+
 import { useState, useRef } from 'react';
 import { 
   BoldIcon, 
@@ -9,6 +13,7 @@ import {
 export default function ProposalEditor({ content, onChange, readOnly = false }) {
   const textareaRef = useRef(null);
 
+  // Function to insert text at the current cursor position
   const insertText = (before, after = '') => {
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
@@ -25,6 +30,7 @@ export default function ProposalEditor({ content, onChange, readOnly = false }) 
     }, 0);
   };
 
+  // Formatting functions
   const formatBold = () => insertText('**', '**');
   const formatItalic = () => insertText('*', '*');
   const formatBullet = () => insertText('\n• ');
@@ -32,6 +38,7 @@ export default function ProposalEditor({ content, onChange, readOnly = false }) 
 
   return (
     <div className="card">
+      {/* Formatting toolbar - only shown in edit mode */}
       {!readOnly && (
         <div className="flex items-center space-x-2 mb-4 pb-4 border-b border-gray-200">
           <button
@@ -69,6 +76,7 @@ export default function ProposalEditor({ content, onChange, readOnly = false }) 
         </div>
       )}
       
+      {/* Textarea for editing proposal content */}
       <textarea
         ref={textareaRef}
         value={content}

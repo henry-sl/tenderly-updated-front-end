@@ -1,3 +1,7 @@
+// pages/company.js
+// This page displays and allows editing of the company profile
+// It uses the ProfileForm component to handle the form functionality
+
 import ProfileForm from '../components/ProfileForm';
 
 export default function CompanyProfile() {
@@ -10,6 +14,7 @@ export default function CompanyProfile() {
         </p>
       </div>
       
+      {/* Render the profile form component */}
       <ProfileForm />
     </div>
   );

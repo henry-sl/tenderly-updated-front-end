@@ -1,6 +1,11 @@
+// components/ReputationTable.jsx
+// This component displays a table of blockchain attestations (proofs) for submitted proposals
+// It shows the tender details, submission date, and blockchain transaction ID
+
 import { ExternalLinkIcon } from '@heroicons/react/24/outline';
 
 export default function ReputationTable({ attestations }) {
+  // Show a message if there are no attestations yet
   if (!attestations || attestations.length === 0) {
     return (
       <div className="card text-center py-8">
@@ -12,6 +17,7 @@ export default function ReputationTable({ attestations }) {
     );
   }
 
+  // Render the table of attestations
   return (
     <div className="card overflow-hidden">
       <div className="overflow-x-auto">
@@ -35,6 +41,7 @@ export default function ReputationTable({ attestations }) {
           <tbody className="bg-white divide-y divide-gray-200">
             {attestations.map((attestation) => (
               <tr key={attestation.id} className="hover:bg-gray-50">
+                {/* Tender information */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
                     {attestation.tenderTitle}
@@ -43,14 +50,17 @@ export default function ReputationTable({ attestations }) {
                     {attestation.agency}
                   </div>
                 </td>
+                {/* Submission date */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(attestation.submittedAt).toLocaleDateString()}
                 </td>
+                {/* Status badge */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     On-chain
                   </span>
                 </td>
+                {/* Blockchain transaction link */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <a
                     href={`https://testnet.algoexplorer.io/tx/${attestation.txId}`}

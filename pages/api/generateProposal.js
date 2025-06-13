@@ -1,6 +1,11 @@
+// pages/api/generateProposal.js
+// This API endpoint generates a proposal draft for a specific tender
+// It uses AI to create a professional proposal based on the tender and company profile
+
 import { getTenderById, getCompanyProfile, createProposal } from '../../lib/store';
 
 export default async function handler(req, res) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,11 +15,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'tenderId is required' });
   }
 
+  // Get tender details
   const tender = getTenderById(tenderId);
   if (!tender) {
     return res.status(404).json({ error: 'Tender not found' });
   }
 
+  // Get company profile
   const profile = getCompanyProfile();
   if (!profile) {
     return res.status(500).json({ error: 'Company profile missing' });
@@ -47,10 +54,12 @@ export default async function handler(req, res) {
       `${profile.name} Team\n\n` +
       `*(This is a mock proposal generated for testing purposes)*`;
     
+    // Create a new proposal with the dummy content
     const dummyProposalId = createProposal(tender, dummyContent);
     return res.status(200).json({ proposalId: dummyProposalId });
   }
 
+  // Use Claude AI to generate a proposal (when API key is available)
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: 'POST',

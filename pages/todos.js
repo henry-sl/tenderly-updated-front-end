@@ -1,3 +1,7 @@
+// pages/todos.js
+// This page provides a simple todo list functionality using Supabase
+// It demonstrates basic CRUD operations with the database
+
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../contexts/AuthContext';
@@ -12,12 +16,14 @@ export default function TodosPage() {
   const [newTodo, setNewTodo] = useState('');
   const [adding, setAdding] = useState(false);
 
+  // Load todos when component mounts and user is authenticated
   useEffect(() => {
     if (user) {
       getTodos();
     }
   }, [user]);
 
+  // Fetch todos from Supabase
   const getTodos = async () => {
     try {
       setLoading(true);
@@ -38,6 +44,7 @@ export default function TodosPage() {
     }
   };
 
+  // Add a new todo
   const addTodo = async (e) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
@@ -69,6 +76,7 @@ export default function TodosPage() {
     }
   };
 
+  // Toggle todo completion status
   const toggleTodo = async (id, completed) => {
     try {
       const { error } = await supabase
@@ -87,6 +95,7 @@ export default function TodosPage() {
     }
   };
 
+  // Delete a todo
   const deleteTodo = async (id) => {
     try {
       const { error } = await supabase
@@ -104,6 +113,7 @@ export default function TodosPage() {
     }
   };
 
+  // Require login to access this page
   if (!user) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -147,6 +157,7 @@ export default function TodosPage() {
       {/* Todos List */}
       <div className="card">
         {loading ? (
+          // Loading state
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="flex items-center space-x-4">
@@ -157,6 +168,7 @@ export default function TodosPage() {
             ))}
           </div>
         ) : todos.length > 0 ? (
+          // Todo items
           <div className="space-y-4">
             {todos.map((todo) => (
               <div
@@ -191,6 +203,7 @@ export default function TodosPage() {
             ))}
           </div>
         ) : (
+          // Empty state
           <div className="text-center py-8">
             <p className="text-gray-500">No todos yet. Add your first todo above!</p>
           </div>

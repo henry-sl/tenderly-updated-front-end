@@ -1,3 +1,7 @@
+// pages/tenders/[id].js
+// This page displays detailed information about a specific tender
+// It includes AI-powered features like summarization, eligibility checking, and proposal drafting
+
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -16,20 +20,23 @@ import {
 
 export default function TenderDetails() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // Get tender ID from URL
   const { addToast } = useToast();
   
+  // State for AI-generated content
   const [summary, setSummary] = useState(null);
   const [eligibility, setEligibility] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
   const [loadingEligibility, setLoadingEligibility] = useState(false);
   const [loadingProposal, setLoadingProposal] = useState(false);
 
+  // Fetch tender details from the API
   const { data: tender, error, isLoading } = useSWR(
     id ? `/api/tenders/${id}` : null,
     fetcher
   );
 
+  // Generate an AI summary of the tender
   const handleSummarize = async () => {
     try {
       setLoadingSummary(true);
@@ -46,6 +53,7 @@ export default function TenderDetails() {
     }
   };
 
+  // Check company eligibility for the tender
   const handleCheckEligibility = async () => {
     try {
       setLoadingEligibility(true);
@@ -62,6 +70,7 @@ export default function TenderDetails() {
     }
   };
 
+  // Generate an AI-drafted proposal for the tender
   const handleDraftProposal = async () => {
     try {
       setLoadingProposal(true);
@@ -78,6 +87,7 @@ export default function TenderDetails() {
     }
   };
 
+  // Error state
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -88,6 +98,7 @@ export default function TenderDetails() {
     );
   }
 
+  // Loading state
   if (isLoading || !tender) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -100,6 +111,7 @@ export default function TenderDetails() {
     );
   }
 
+  // Calculate days until closing date
   const daysUntilClosing = Math.ceil(
     (new Date(tender.closingDate) - new Date()) / (1000 * 60 * 60 * 24)
   );
@@ -107,8 +119,10 @@ export default function TenderDetails() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
+        {/* Tender title */}
         <h1 className="text-3xl font-bold text-gray-900 mb-4">{tender.title}</h1>
         
+        {/* Tender metadata */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
           <div className="flex items-center">
             <BuildingOfficeIcon className="h-4 w-4 mr-2" />
@@ -128,8 +142,9 @@ export default function TenderDetails() {
           )}
         </div>
 
-        {/* AI Actions */}
+        {/* AI Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {/* Summarize button */}
           <button
             onClick={handleSummarize}
             disabled={loadingSummary}
@@ -139,6 +154,7 @@ export default function TenderDetails() {
             {loadingSummary ? 'Summarizing...' : 'Summarize'}
           </button>
           
+          {/* Check Eligibility button */}
           <button
             onClick={handleCheckEligibility}
             disabled={loadingEligibility}
@@ -148,6 +164,7 @@ export default function TenderDetails() {
             {loadingEligibility ? 'Checking...' : 'Check Eligibility'}
           </button>
           
+          {/* Draft Proposal button */}
           <button
             onClick={handleDraftProposal}
             disabled={loadingProposal}
@@ -157,6 +174,7 @@ export default function TenderDetails() {
             {loadingProposal ? 'Generating...' : 'Draft Proposal'}
           </button>
           
+          {/* Voice Player component */}
           <VoicePlayer 
             tenderId={id} 
             onError={(error) => addToast(error, 'error')} 
@@ -165,7 +183,7 @@ export default function TenderDetails() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
+        {/* Main Content - Tender Description */}
         <div className="lg:col-span-2">
           <div className="card">
             <h2 className="text-xl font-semibold mb-4">Tender Description</h2>
@@ -177,7 +195,7 @@ export default function TenderDetails() {
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Sidebar - AI-generated content */}
         <div className="space-y-6">
           {summary && <SummaryBox summary={summary} loading={loadingSummary} />}
           {eligibility && <EligibilityBox eligibility={eligibility} loading={loadingEligibility} />}
