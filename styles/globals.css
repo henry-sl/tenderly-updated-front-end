@@ -1,162 +1,137 @@
 /* styles/globals.css */
-/* Global styles with accessibility improvements and consistent design */
+/* This file contains global styles for the application */
+/* It uses Tailwind CSS utility classes and custom component styles */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Base styles with accessibility improvements */
+/* Base styles */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
-  }
-
-  /* Focus styles for accessibility */
-  *:focus {
-    @apply outline-none;
-  }
-
-  /* High contrast focus indicators */
-  *:focus-visible {
-    @apply ring-2 ring-blue-500 ring-offset-2;
-  }
-
-  /* Ensure proper heading hierarchy */
-  h1 { @apply text-3xl font-bold; }
-  h2 { @apply text-2xl font-semibold; }
-  h3 { @apply text-xl font-semibold; }
-  h4 { @apply text-lg font-medium; }
-  h5 { @apply text-base font-medium; }
-  h6 { @apply text-sm font-medium; }
-
-  /* Screen reader only content */
-  .sr-only {
-    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
-  }
-
-  .sr-only:focus {
-    @apply static w-auto h-auto p-1 m-0 overflow-visible whitespace-normal;
+    @apply bg-gray-50;
   }
 }
 
 /* Custom component styles */
 @layer components {
-  /* Button styles with accessibility */
+  /* Button styles */
   .btn {
-    @apply inline-flex items-center px-4 py-2 rounded-md font-medium shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex items-center px-4 py-2 rounded-md font-medium shadow-sm transition;
   }
   
-  /* Primary button - blue with proper contrast */
+  /* Primary button - blue */
   .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+    @apply bg-blue-600 text-white hover:bg-blue-700;
   }
   
-  /* Secondary button - gray outline with proper contrast */
+  /* Secondary button - gray outline */
   .btn-secondary {
-    @apply border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-gray-500;
+    @apply border border-gray-300 text-gray-700 hover:bg-gray-50;
   }
   
-  /* Card component - white box with shadow and proper contrast */
+  /* Card component - white box with shadow */
   .card {
-    @apply bg-white rounded-lg shadow border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200;
+    @apply bg-white rounded-lg shadow p-4 hover:shadow-md transition;
   }
   
-  /* Skeleton loading animation with accessibility */
+  /* Skeleton loading animation */
   .skeleton {
     @apply animate-pulse bg-gray-200 rounded;
   }
 
-  /* Form input styles with accessibility */
-  .form-input {
-    @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  /* Sidebar tooltip styles */
+  .sidebar-tooltip {
+    @apply absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50;
   }
 
-  /* Navigation link styles */
-  .nav-link {
-    @apply flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  .sidebar-tooltip::before {
+    @apply absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 rotate-45;
+    content: '';
   }
 
-  .nav-link.active {
-    @apply bg-blue-50 text-blue-700 border-r-2 border-blue-600;
+  /* Smooth transitions for sidebar */
+  .sidebar-transition {
+    @apply transition-all duration-300 ease-in-out;
   }
 
-  .nav-link:not(.active) {
-    @apply text-gray-700 hover:bg-gray-50 hover:text-gray-900;
+  /* Focus styles for accessibility */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   }
 }
 
-/* Utility classes for accessibility */
+/* Custom utilities */
 @layer utilities {
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    .btn-primary {
-      @apply border-2 border-blue-800;
-    }
-    
-    .btn-secondary {
-      @apply border-2 border-gray-800;
-    }
+  /* Text truncation with ellipsis */
+  .truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+  /* Smooth scrolling */
+  .scroll-smooth {
+    scroll-behavior: smooth;
   }
 
-  /* Print styles */
-  @media print {
-    .no-print {
-      @apply hidden;
-    }
-    
-    .print-only {
-      @apply block;
-    }
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-
-  /* Focus management utilities */
-  .focus-trap {
-    @apply relative;
-  }
-
-  .focus-trap:focus-within {
-    @apply ring-2 ring-blue-500 ring-offset-2;
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 
-/* Custom scrollbar styles */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Animation keyframes */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+/* Mobile-first responsive design helpers */
+@media (max-width: 768px) {
+  .mobile-padding {
+    @apply px-4 py-2;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sidebar-item {
+    @apply border border-gray-400;
+  }
 }
 
-/* Ensure proper line height for readability */
-p, li, td {
-  line-height: 1.6;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-transition {
+    @apply transition-none;
+  }
+  
+  .skeleton {
+    @apply animate-none;
+  }
 }
 
-/* Ensure sufficient color contrast for links */
-a {
-  @apply text-blue-600 hover:text-blue-800 focus:text-blue-800;
-}
-
-/* Skip link styles */
-.skip-link {
-  @apply absolute top-4 left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 transform -translate-y-16 focus:translate-y-0 transition-transform;
+/* Dark mode support (for future implementation) */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode styles can be added here when needed */
 }
