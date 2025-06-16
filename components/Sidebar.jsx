@@ -1,6 +1,6 @@
 // components/Sidebar.jsx
-// Responsive sidebar navigation component that matches the TenderHub design
-// Supports collapsed/expanded states with smooth animations and accessibility features
+// Optimized responsive sidebar navigation with balanced width management
+// Maintains logo visibility and prevents excessive content shifting
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -80,7 +80,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }) {
       {/* Mobile menu button */}
       <button
         onClick={toggleMobileMenu}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md border border-gray-200 hover:bg-gray-50 transition-colors focus-ring"
         aria-label="Toggle navigation menu"
       >
         {isMobileOpen ? (
@@ -102,58 +102,73 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-40 transition-all duration-300 ease-in-out
-          ${isCollapsed ? 'w-16' : 'w-64'}
+          fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-40 sidebar-transition
+          ${isCollapsed ? 'w-16' : 'w-60'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
           lg:relative lg:translate-x-0
         `}
         aria-label="Main navigation"
       >
-        {/* Sidebar header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        {/* Sidebar header with optimized spacing */}
+        <div className={`flex items-center border-b border-gray-200 ${isCollapsed ? 'p-3 justify-center' : 'p-4 justify-between'}`}>
           {!isCollapsed && (
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-3 min-w-0">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-sm">T</span>
               </div>
-              <span className="text-xl font-semibold text-gray-900">TenderHub</span>
+              <span className="text-lg font-semibold text-gray-900 truncate">TenderHub</span>
             </div>
           )}
           
           {isCollapsed && (
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mx-auto">
-              <span className="text-white font-bold text-sm">T</span>
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-base">T</span>
             </div>
           )}
 
           {/* Desktop collapse button */}
-          <button
-            onClick={toggleSidebar}
-            className="hidden lg:block p-1.5 rounded-md hover:bg-gray-100 transition-colors"
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <Bars3Icon className="h-5 w-5 text-gray-500" />
-          </button>
+          {!isCollapsed && (
+            <button
+              onClick={toggleSidebar}
+              className="hidden lg:block p-1.5 rounded-md hover:bg-gray-100 transition-colors focus-ring flex-shrink-0"
+              aria-label="Collapse sidebar"
+            >
+              <Bars3Icon className="h-5 w-5 text-gray-500" />
+            </button>
+          )}
         </div>
 
+        {/* Expand button for collapsed state */}
+        {isCollapsed && (
+          <div className="p-2 border-b border-gray-100">
+            <button
+              onClick={toggleSidebar}
+              className="hidden lg:block w-full p-2 rounded-md hover:bg-gray-100 transition-colors focus-ring"
+              aria-label="Expand sidebar"
+            >
+              <Bars3Icon className="h-4 w-4 text-gray-500 mx-auto" />
+            </button>
+          </div>
+        )}
+
         {/* Navigation */}
-        <nav className="flex-1 p-4" role="navigation">
-          <ul className="space-y-2" role="list">
+        <nav className={`flex-1 ${isCollapsed ? 'p-2' : 'p-4'}`} role="navigation">
+          <ul className="space-y-1" role="list">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = isActiveRoute(item.href);
 
               return (
-                <li key={item.name} role="listitem">
+                <li key={item.name} role="listitem" className="relative group">
                   <Link
                     href={item.href}
                     className={`
-                      group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200
+                      flex items-center text-sm font-medium rounded-lg sidebar-transition focus-ring
+                      ${isCollapsed ? 'p-3 justify-center' : 'px-3 py-2.5 justify-start'}
                       ${isActive 
                         ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600' 
                         : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       }
-                      ${isCollapsed ? 'justify-center' : 'justify-start'}
                     `}
                     onClick={() => setIsMobileOpen(false)}
                     aria-current={isActive ? 'page' : undefined}
@@ -161,28 +176,27 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }) {
                   >
                     <Icon 
                       className={`
-                        h-5 w-5 flex-shrink-0 transition-colors duration-200
+                        flex-shrink-0 sidebar-transition
+                        ${isCollapsed ? 'h-5 w-5' : 'h-5 w-5 mr-3'}
                         ${isActive ? 'text-blue-600' : 'text-gray-500 group-hover:text-gray-700'}
-                        ${isCollapsed ? '' : 'mr-3'}
                       `}
                       aria-hidden="true"
                     />
                     
                     {!isCollapsed && (
-                      <span className="truncate">{item.name}</span>
+                      <span className="truncate flex-1">{item.name}</span>
                     )}
 
                     {/* Active indicator */}
                     {isActive && !isCollapsed && (
-                      <div className="ml-auto w-2 h-2 bg-blue-600 rounded-full" aria-hidden="true" />
+                      <div className="ml-2 w-2 h-2 bg-blue-600 rounded-full flex-shrink-0" aria-hidden="true" />
                     )}
                   </Link>
 
                   {/* Tooltip for collapsed state */}
                   {isCollapsed && (
-                    <div className="hidden lg:block absolute left-16 top-0 ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+                    <div className="sidebar-tooltip">
                       {item.name}
-                      <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 rotate-45" />
                     </div>
                   )}
                 </li>
@@ -191,10 +205,10 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }) {
           </ul>
         </nav>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-gray-200">
+        {/* Footer with version info */}
+        <div className={`border-t border-gray-200 ${isCollapsed ? 'p-2' : 'p-4'}`}>
           {!isCollapsed ? (
-            <div className="text-xs text-gray-500 text-center">
+            <div className="text-xs text-gray-500 text-center space-y-1">
               <div className="font-medium">TenderHub Pro</div>
               <div>Version 1.0.0</div>
             </div>
@@ -205,14 +219,6 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }) {
           )}
         </div>
       </aside>
-
-      {/* Main content spacer for desktop */}
-      <div 
-        className={`hidden lg:block transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'w-16' : 'w-64'
-        }`} 
-        aria-hidden="true"
-      />
     </>
   );
 }

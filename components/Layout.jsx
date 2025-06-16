@@ -1,6 +1,6 @@
 // components/Layout.jsx
-// Updated layout component to use the new responsive sidebar navigation
-// Provides consistent page structure with sidebar, main content, and toast notifications
+// Optimized layout component with balanced content distribution
+// Prevents excessive rightward shifting and maintains proper spacing
 
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
@@ -17,22 +17,33 @@ export default function Layout({ children }) {
         setIsCollapsed={setSidebarCollapsed} 
       />
       
-      {/* Main Content Area */}
+      {/* Main Content Area with optimized spacing */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Main content where page-specific content is rendered */}
-        <main className="flex-1 p-4 lg:p-8">
-          {children}
+        {/* Main content with responsive padding and max-width constraints */}
+        <main className={`
+          flex-1 transition-all duration-300 ease-in-out
+          ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'}
+          px-4 py-6 lg:px-8 lg:py-8
+          max-w-none
+        `}>
+          {/* Content wrapper with balanced margins */}
+          <div className="max-w-7xl mx-auto w-full">
+            {children}
+          </div>
         </main>
         
-        {/* Footer with attribution */}
-        <footer className="bg-white border-t border-gray-200 mt-auto">
+        {/* Footer with consistent spacing */}
+        <footer className={`
+          bg-white border-t border-gray-200 mt-auto transition-all duration-300 ease-in-out
+          ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-60'}
+        `}>
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center">
               <a
                 href="https://bolt.new"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition"
+                className="flex items-center space-x-2 text-gray-500 hover:text-gray-700 transition focus-ring rounded-md px-2 py-1"
               >
                 <span className="text-sm">Built on</span>
                 <div className="bg-black text-white px-2 py-1 rounded text-xs font-bold">
@@ -44,7 +55,7 @@ export default function Layout({ children }) {
         </footer>
       </div>
       
-      {/* Toast notification container for displaying alerts */}
+      {/* Toast notification container */}
       <ToastContainer />
     </div>
   );
