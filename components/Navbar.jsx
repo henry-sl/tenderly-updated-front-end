@@ -1,6 +1,7 @@
 // components/Navbar.jsx
 // This component renders the navigation bar at the top of every page
 // It includes the app logo, navigation links, and user authentication controls
+// Updated to include Settings link in navigation
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,12 +22,13 @@ export default function Navbar() {
     router.push('/login');
   };
 
-  // Navigation links configuration
+  // Navigation links configuration - updated to include Settings
   const navigation = [
     { name: 'Tenders', href: '/tenders' },
     { name: 'Todos', href: '/todos' },
     { name: 'Profile', href: '/company' },
     { name: 'Proofs', href: '/reputation' },
+    { name: 'Settings', href: '/settings' },
   ];
 
   return (
