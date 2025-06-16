@@ -1,13 +1,14 @@
 // pages/settings.js
-// Settings page route that integrates the new Settings components into the Tenderly application
-// Provides user account management and preferences interface
+// Settings page with proper accessibility and error handling
+// Integrates with existing Settings components
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
-import SettingsPage from '../components/Settings/SettingsPage';
+import SettingsForm from '../components/Settings/SettingsForm';
+import LoadingSpinner from '../components/LoadingSpinner';
 
-export default function Settings() {
+export default function SettingsPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -22,7 +23,7 @@ export default function Settings() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+        <LoadingSpinner size="large" message="Loading settings..." />
       </div>
     );
   }
@@ -32,5 +33,20 @@ export default function Settings() {
     return null;
   }
 
-  return <SettingsPage />;
+  return (
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Page Header */}
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+        <p className="mt-2 text-gray-600">
+          Manage your account preferences and notification settings
+        </p>
+      </header>
+
+      {/* Main Content */}
+      <main>
+        <SettingsForm />
+      </main>
+    </div>
+  );
 }

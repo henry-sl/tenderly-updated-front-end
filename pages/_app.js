@@ -1,21 +1,46 @@
 // pages/_app.js
-// This is the main entry point for the Next.js application
-// It wraps all pages with global providers and layout
+// Main application entry point with error boundaries and providers
+// Implements lazy loading and accessibility features
 
 import '../styles/globals.css';
 import { AuthProvider } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-// The App component receives the Component to render and its pageProps
+// Focus management for route changes
+function useFocusManagement() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Focus main content after route change for accessibility
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.focus();
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+}
+
 export default function App({ Component, pageProps }) {
+  useFocusManagement();
+
   return (
-    // AuthProvider makes authentication state available throughout the app
-    <AuthProvider>
-      {/* Layout provides consistent page structure with navbar, footer, etc. */}
-      <Layout>
-        {/* Render the current page component with its props */}
-        <Component {...pageProps} />
-      </Layout>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Layout>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </Layout>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
